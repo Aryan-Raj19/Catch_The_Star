@@ -18,23 +18,23 @@ const StartScreen = ({ onStart }) => {
         className="flex flex-col items-center gap-3"
       >
         <motion.span
-          className="text-7xl md:text-8xl"
+          className="text-7xl md:text-8xl pb-7"
           animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.1, 1] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         >
-          🌟
+          💗
         </motion.span>
         <h1
           className="text-4xl md:text-6xl font-bold text-white"
           style={{ fontFamily: "Dancing Script, cursive" }}
         >
-          Catch A Star
+          💖 Catch The Hearts 💖
         </h1>
         <p
           className="text-pink-300 text-lg md:text-xl"
           style={{ fontFamily: "Dosis, sans-serif" }}
         >
-          A little game made just for you ❤️
+          ❤️ Tere liye ek pyara sa chota sa game ❤️
         </p>
       </motion.div>
 
@@ -43,21 +43,22 @@ const StartScreen = ({ onStart }) => {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="w-full max-w-sm rounded-2xl border border-pink-400/20 backdrop-blur-md px-6 py-5 text-left flex flex-col gap-3"
+        className="w-full max-w-fit rounded-2xl border border-pink-400/20 backdrop-blur-md px-6 py-5 text-left flex flex-col gap-3"
         style={{ background: "rgba(177, 26, 112, 0.1)" }}
       >
         <p
-          className="text-pink-200 font-bold text-center text-lg mb-1"
+          className="text-pink-200 font-extrabold text-center text-2xl mb-1"
           style={{ fontFamily: "Dancing Script, cursive" }}
         >
-          How to play
+          💘 Kuch faltu ke rules 💘
         </p>
         {[
-          `❤️  Catch the HEARTS — each one reveals a love message`,
-          `⭐  Avoid the STARS — catching one costs you a point`,
-          `🎯  Catch ${GAME_CONFIG.HEART_GOAL} hearts to unlock a secret message`,
-          `⏱️  You have ${GAME_CONFIG.TIME_LIMIT} seconds — stay focused!`,
-          `🔥  Everything falls faster as you go — don't blink!`,
+          `🌚  To aasman se hearts and stars dono drop honge`,
+          `💖  Tujhe bus HEARTS catch krne h`,
+          `⭐  STARS ko catch kiya to -1`,
+          `🎯  And ${GAME_CONFIG.HEART_GOAL} HEARTS pe ek secret message unlock hoga`,
+          `⏱️  Aur pura din nhi h bus ${GAME_CONFIG.TIME_LIMIT} secs, to stay focused bubu!`,
+          `🔥  Game easy nhi h betu so go on🫡`,
         ].map((rule, i) => (
           <p
             key={i}
@@ -77,24 +78,16 @@ const StartScreen = ({ onStart }) => {
         transition={{ delay: 0.8, duration: 0.5 }}
         whileHover={{ scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
-        className="pulse-glow px-10 py-4 rounded-full font-bold text-white text-lg md:text-xl cursor-pointer border border-pink-400/40"
+        className="pulse-glow px-7 py-4 rounded-full font-bold text-white text-lg md:text-xl cursor-pointer border border-pink-400/40"
         style={{
           background: "linear-gradient(135deg, #b11a70, #ed66b2)",
           fontFamily: "Dosis, sans-serif",
         }}
       >
-        Start Catching ❤️
+        😘 Let's Go Meli Kuchu Puchu 😘
       </motion.button>
     </motion.div>
   );
 };
 
 export default StartScreen;
-
-
-
-// `⭐  Baby to apko ye girte hue stars ko catch krna h`,
-//           `💌  And haar star me ek message chupa hua h`,
-//           `🎯  And ${GAME_CONFIG.GOAL} stars catch krne pe ek secret h`,
-//           `⏱️  Apke pass bus ${GAME_CONFIG.TIME_LIMIT} secs honge stars catch krne ke liye`,
-//           `🔥  Stars dheere dheere fast bhi ho jayenge to give your best`,

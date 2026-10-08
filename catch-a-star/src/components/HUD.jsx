@@ -82,7 +82,7 @@ const HUD = ({ heartsCaught, timeLeft, lastStarPenalty }) => {
             key={timeLeft}
             initial={{ scale: 1.2, opacity: 0.6 }}
             animate={{ scale: 1, opacity: 1 }}
-            className={`flex items-center gap-2 backdrop-blur-sm border rounded-full px-4 py-1.5 ${
+            className={`flex items-center gap-2 backdrop-blur-sm border rounded-full px-4 mr-15 py-1.5 ${
               isWarning
                 ? "bg-red-900/40 border-red-400/50 shake"
                 : "bg-white/5 border-white/10"

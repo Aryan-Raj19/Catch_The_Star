@@ -64,7 +64,7 @@ function App() {
           animate={{ opacity: 1 }}
           onClick={toggleMute}
           aria-label={isMuted ? "Unmute" : "Mute"}
-          className="fixed top-4 right-4 z-50 flex items-center justify-center w-10 h-10 rounded-full backdrop-blur-sm border border-white/10 bg-white/5 text-pink-300 hover:text-white hover:bg-white/10 transition-colors duration-200 cursor-pointer"
+          className="fixed top-3 right-4 z-50 flex items-center justify-center w-10 h-10 rounded-full backdrop-blur-sm border border-white/10 bg-white/5 text-pink-300 hover:text-white hover:bg-white/10 transition-colors duration-200 cursor-pointer"
         >
           {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
         </motion.button>

@@ -26,7 +26,7 @@ const LoveReasonCard = ({ reason }) => {
           className="fixed bottom-24 left-1/2 z-40 -translate-x-1/2 w-[88vw] max-w-sm"
         >
           <div
-            className="rounded-2xl px-5 py-4 text-center border border-pink-400/30 backdrop-blur-md"
+            className="rounded-2xl mb-30 px-5 py-4 text-center border border-pink-400/30 backdrop-blur-md"
             style={{
               background: "linear-gradient(135deg, rgba(177,26,112,0.25), rgba(237,102,178,0.15))",
               boxShadow: "0 0 20px rgba(177,26,112,0.3)",
