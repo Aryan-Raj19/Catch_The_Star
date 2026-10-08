@@ -19,8 +19,8 @@ export const LOVE_REASONS = [
 
 // Final unlocked message shown on win screen
 export const FINAL_MESSAGE = {
-  title: `💖 You caught all the stars, just like you caught my heart 💖
-  Wabi-Sabi`,
+  header: "You caught all the stars, just like you caught my heart",
+  title: "💖🫂 Wabi-Sabi 🫂💖",
   body: `The unknown hand saves a dying blossom,
 Waters its roots, and gives hope to bloom. 
 

@@ -65,12 +65,18 @@ const WinScreen = ({ caughtReasons, onReplay }) => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="w-full max-w-lg rounded-3xl border border-pink-400/30 backdrop-blur-md px-7 py-8 text-center"
+          className="w-full max-w-fit rounded-3xl border border-pink-400/30 backdrop-blur-md px-7 py-8 text-center"
           style={{
             background: "linear-gradient(135deg, rgba(177,26,112,0.2), rgba(74,0,128,0.2))",
             boxShadow: "0 0 40px rgba(177,26,112,0.25)",
           }}
         >
+          <p
+            className="text-pink-200 text-xl md:text-2xl font-bold mb-5 leading-snug"
+            style={{ fontFamily: "Dancing Script, cursive" }}
+          >
+            {FINAL_MESSAGE.header}
+          </p>
           <p
             className="text-pink-200 text-xl md:text-2xl font-bold mb-5 leading-snug"
             style={{ fontFamily: "Dancing Script, cursive" }}
