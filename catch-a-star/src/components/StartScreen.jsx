@@ -28,13 +28,13 @@ const StartScreen = ({ onStart }) => {
           className="text-4xl md:text-6xl font-bold text-white"
           style={{ fontFamily: "Dancing Script, cursive" }}
         >
-          Catch The Star My Baby
+          Catch A Star
         </h1>
         <p
           className="text-pink-300 text-lg md:text-xl"
           style={{ fontFamily: "Dosis, sans-serif" }}
         >
-          A cute little game made just for you ❤️
+          A little game made just for you ❤️
         </p>
       </motion.div>
 
@@ -43,7 +43,7 @@ const StartScreen = ({ onStart }) => {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="w-full max-w-max rounded-2xl border border-pink-400/20 backdrop-blur-md px-6 py-5 text-left flex flex-col gap-3"
+        className="w-full max-w-sm rounded-2xl border border-pink-400/20 backdrop-blur-md px-6 py-5 text-left flex flex-col gap-3"
         style={{ background: "rgba(177, 26, 112, 0.1)" }}
       >
         <p
@@ -53,11 +53,11 @@ const StartScreen = ({ onStart }) => {
           How to play
         </p>
         {[
-          `⭐  Baby to apko ye girte hue stars ko catch krna h`,
-          `💌  And haar star me ek message chupa hua h`,
-          `🎯  And ${GAME_CONFIG.GOAL} stars catch krne pe ek secret h`,
-          `⏱️  Apke pass bus ${GAME_CONFIG.TIME_LIMIT} secs honge stars catch krne ke liye`,
-          `🔥  Stars dheere dheere fast bhi ho jayenge to give your best`,
+          `❤️  Catch the HEARTS — each one reveals a love message`,
+          `⭐  Avoid the STARS — catching one costs you a point`,
+          `🎯  Catch ${GAME_CONFIG.HEART_GOAL} hearts to unlock a secret message`,
+          `⏱️  You have ${GAME_CONFIG.TIME_LIMIT} seconds — stay focused!`,
+          `🔥  Everything falls faster as you go — don't blink!`,
         ].map((rule, i) => (
           <p
             key={i}
@@ -83,10 +83,18 @@ const StartScreen = ({ onStart }) => {
           fontFamily: "Dosis, sans-serif",
         }}
       >
-        So let's start it ⭐
+        Start Catching ❤️
       </motion.button>
     </motion.div>
   );
 };
 
 export default StartScreen;
+
+
+
+// `⭐  Baby to apko ye girte hue stars ko catch krna h`,
+//           `💌  And haar star me ek message chupa hua h`,
+//           `🎯  And ${GAME_CONFIG.GOAL} stars catch krne pe ek secret h`,
+//           `⏱️  Apke pass bus ${GAME_CONFIG.TIME_LIMIT} secs honge stars catch krne ke liye`,
+//           `🔥  Stars dheere dheere fast bhi ho jayenge to give your best`,

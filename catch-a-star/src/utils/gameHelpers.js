@@ -1,19 +1,24 @@
 import { GAME_CONFIG } from "../constants/gameConfig";
 
 /**
- * Returns a random number between min and max (inclusive)
+ * Returns a random number between min and max
  */
 export const randomBetween = (min, max) =>
   Math.random() * (max - min) + min;
 
 /**
- * Generates a new star object with a unique id and randomised properties.
- * @param {number} score - current caught count, used to scale difficulty
+ * Generates a single collectible object.
+ * @param {number} heartsCaught - hearts caught so far, used to scale difficulty
+ * @param {"star"|"heart"} type - explicit type override; omit to use probability
  */
-export const generateStar = (score) => {
-  const difficulty = Math.floor(score / GAME_CONFIG.DIFFICULTY_RAMP_EVERY);
+export const generateCollectible = (heartsCaught, type) => {
+  // Determine type by probability if not explicitly provided
+  const resolvedType =
+    type ?? (Math.random() < GAME_CONFIG.HEART_PROBABILITY ? "heart" : "star");
 
-  // Spawn anywhere across 10%–90% of viewport width so stars don't clip edges
+  const difficulty = Math.floor(heartsCaught / GAME_CONFIG.DIFFICULTY_RAMP_EVERY);
+
+  // Spawn anywhere across 8%–88% of viewport width so items don't clip edges
   const leftPercent = randomBetween(8, 88);
 
   const size = randomBetween(
@@ -38,16 +43,23 @@ export const generateStar = (score) => {
     GAME_CONFIG.STAR_LIFETIME_MIN
   );
 
-  // Wobble amount — stars drift left/right slightly as they fall
+  // Wobble: collectible drifts left/right slightly as it falls
   const wobbleAmount = randomBetween(20, 60);
   const wobbleDirection = Math.random() > 0.5 ? 1 : -1;
 
-  // Star emoji variety
-  const emojis = ["⭐", "🌟", "✨", "💫"];
-  const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+  // Emoji based on type
+  // Hearts: single emoji for clear distinction
+  // Stars: variety of star emojis
+  const starEmojis = ["⭐", "🌟", "✨", "💫"];
+  const heartEmojis = ["❤️", "💖", "💘", "💝", "💗"];
+  const emoji =
+    resolvedType === "heart"
+      ? heartEmojis[Math.floor(Math.random() * heartEmojis.length)]
+      : starEmojis[Math.floor(Math.random() * starEmojis.length)];
 
   return {
-    id: `star-${Date.now()}-${Math.random()}`,
+    id: `collectible-${Date.now()}-${Math.random()}`,
+    type: resolvedType,      // "star" | "heart"
     leftPercent,
     size,
     fallSpeed,
@@ -69,7 +81,6 @@ export const pickLoveReason = (reasons, shownIndices) => {
     .filter(({ index }) => !shownIndices.includes(index));
 
   if (available.length === 0) {
-    // All shown — pick any random one
     const i = Math.floor(Math.random() * reasons.length);
     return { reason: reasons[i], index: i };
   }
@@ -79,10 +90,10 @@ export const pickLoveReason = (reasons, shownIndices) => {
 };
 
 /**
- * Calculates spawn interval based on current score — gets faster over time.
+ * Calculates spawn interval based on hearts caught — gets faster over time.
  */
-export const getSpawnInterval = (score) => {
-  const difficulty = Math.floor(score / GAME_CONFIG.DIFFICULTY_RAMP_EVERY);
+export const getSpawnInterval = (heartsCaught) => {
+  const difficulty = Math.floor(heartsCaught / GAME_CONFIG.DIFFICULTY_RAMP_EVERY);
   return Math.max(
     GAME_CONFIG.SPAWN_INTERVAL_BASE - difficulty * 80,
     GAME_CONFIG.SPAWN_INTERVAL_MIN

@@ -1,28 +1,86 @@
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Timer, Heart } from "lucide-react";
+import { Timer } from "lucide-react";
 import { GAME_CONFIG } from "../constants/gameConfig";
 
 /**
- * Heads-up display: score, goal progress bar, and countdown timer.
- * Timer turns red and shakes in the final TIMER_WARNING seconds.
+ * Heads-up display — shows:
+ *   ❤️ heartsCaught / HEART_GOAL   (main progress toward win)
+ *   score                           (running tally, shakes on star penalty)
+ *   countdown timer                 (turns red + shakes in final seconds)
+ *   progress bar                    (tied to heartsCaught)
+ *
+ * lastStarPenalty increments each time a star is caught — used to
+ * trigger the "-1" shake animation without a timeout race condition.
  */
-const HUD = ({ score, timeLeft }) => {
+const HUD = ({ score, heartsCaught, timeLeft, lastStarPenalty }) => {
   const isWarning = timeLeft <= GAME_CONFIG.TIMER_WARNING;
-  const progress = Math.min((score / GAME_CONFIG.GOAL) * 100, 100);
+  const progress = Math.min((heartsCaught / GAME_CONFIG.HEART_GOAL) * 100, 100);
+
+  // Show a "-1" flash when a star is caught
+  const [showPenalty, setShowPenalty] = useState(false);
+
+  useEffect(() => {
+    if (lastStarPenalty === 0) return;
+    setShowPenalty(true);
+    const t = setTimeout(() => setShowPenalty(false), 700);
+    return () => clearTimeout(t);
+  }, [lastStarPenalty]);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-30 px-4 pt-4 pb-2 flex flex-col gap-2">
-      {/* Top row: score | timer */}
-      <div className="flex justify-between items-center">
-        {/* Score */}
+
+      {/* Top row */}
+      <div className="flex justify-between items-center gap-2">
+
+        {/* ❤️ Heart progress */}
         <div className="flex items-center gap-2 backdrop-blur-sm bg-white/5 border border-white/10 rounded-full px-4 py-1.5">
-          <Star size={16} className="text-yellow-300" fill="currentColor" />
+          <span className="text-sm leading-none">❤️</span>
           <span
             className="text-white font-bold text-sm"
             style={{ fontFamily: "Dosis, sans-serif" }}
           >
-            {score} / {GAME_CONFIG.GOAL}
+            {heartsCaught} / {GAME_CONFIG.HEART_GOAL}
           </span>
+        </div>
+
+        {/* Score with penalty shake */}
+        <div className="relative flex items-center">
+          <motion.div
+            key={lastStarPenalty}
+            animate={
+              showPenalty
+                ? { x: [-4, 4, -3, 3, 0], backgroundColor: ["rgba(239,68,68,0.3)", "rgba(255,255,255,0.05)"] }
+                : {}
+            }
+            transition={{ duration: 0.4 }}
+            className="flex items-center gap-2 backdrop-blur-sm bg-white/5 border border-white/10 rounded-full px-4 py-1.5"
+          >
+            <span className="text-sm leading-none">⭐</span>
+            <span
+              className="text-white font-bold text-sm"
+              style={{ fontFamily: "Dosis, sans-serif" }}
+            >
+              {score}
+            </span>
+          </motion.div>
+
+          {/* Floating "-1" indicator */}
+          <AnimatePresence>
+            {showPenalty && (
+              <motion.span
+                key={lastStarPenalty + "label"}
+                initial={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 0, y: -24 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.65 }}
+                className="absolute -top-1 right-0 text-red-400 font-bold text-xs pointer-events-none"
+                style={{ fontFamily: "Dosis, sans-serif" }}
+              >
+                -1
+              </motion.span>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Timer */}
@@ -51,7 +109,7 @@ const HUD = ({ score, timeLeft }) => {
         </AnimatePresence>
       </div>
 
-      {/* Progress bar */}
+      {/* Heart progress bar */}
       <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
         <motion.div
           className="h-full rounded-full"
@@ -64,13 +122,13 @@ const HUD = ({ score, timeLeft }) => {
         />
       </div>
 
-      {/* Goal label */}
+      {/* Hint label */}
       <div className="flex justify-center">
         <span
           className="text-white/40 text-xs"
           style={{ fontFamily: "Dosis, sans-serif" }}
         >
-          Catch {GAME_CONFIG.GOAL} stars to unlock the final message
+          ❤️ catch hearts · ⭐ avoid stars · {GAME_CONFIG.HEART_GOAL} hearts to win
         </span>
       </div>
     </div>

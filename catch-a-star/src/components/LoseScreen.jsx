@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import { GAME_CONFIG } from "../constants/gameConfig";
 
-const LoseScreen = ({ score, onRetry }) => {
+const LoseScreen = ({ heartsCaught, onRetry }) => {
   const encouraging = [
-    "So close! The stars believe in you 💫",
-    "Almost! Try once more, you've got this ⭐",
-    "The stars are waiting to be caught 🌟",
+    "So close! The hearts believe in you 💫",
+    "Almost! Try once more, you've got this ❤️",
+    "The hearts are waiting to be caught 🌟",
     "Don't give up — the final message is worth it 💌",
   ];
   const message = encouraging[Math.floor(Math.random() * encouraging.length)];
@@ -43,7 +43,7 @@ const LoseScreen = ({ score, onRetry }) => {
         </p>
       </div>
 
-      {/* Score recap */}
+      {/* Heart progress recap */}
       <div
         className="rounded-2xl border border-pink-400/20 backdrop-blur-md px-8 py-5 flex flex-col gap-2"
         style={{ background: "rgba(177, 26, 112, 0.1)" }}
@@ -52,19 +52,19 @@ const LoseScreen = ({ score, onRetry }) => {
           className="text-white/60 text-sm"
           style={{ fontFamily: "Dosis, sans-serif" }}
         >
-          Stars caught
+          Hearts caught
         </p>
         <p
           className="text-white text-4xl font-bold"
           style={{ fontFamily: "Dancing Script, cursive" }}
         >
-          {score} / {GAME_CONFIG.GOAL}
+          {heartsCaught} / {GAME_CONFIG.HEART_GOAL}
         </p>
         <p
           className="text-pink-300 text-sm"
           style={{ fontFamily: "Dosis, sans-serif" }}
         >
-          {GAME_CONFIG.GOAL - score} more needed to unlock the message
+          {GAME_CONFIG.HEART_GOAL - heartsCaught} more hearts needed to unlock the message
         </p>
       </div>
 
@@ -79,7 +79,7 @@ const LoseScreen = ({ score, onRetry }) => {
           fontFamily: "Dosis, sans-serif",
         }}
       >
-        Try Again ⭐
+        Try Again ❤️
       </motion.button>
     </motion.div>
   );

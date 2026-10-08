@@ -1,39 +1,98 @@
-import { useRef, useCallback } from "react";
-import { Howl } from "howler";
+import { useRef, useCallback, useState } from "react";
+import { Howl, Howler } from "howler";
 
 /**
- * Lazily initialises Howl instances so they're only created once.
- * Returns a play(soundName) function.
+ * Manages all game audio:
+ *   play(name)    — one-shot sound effects (catch, win, lose, tick)
+ *   startMusic()  — begins looping background music (safe to call multiple times)
+ *   stopMusic()   — stops background music
+ *   toggleMute()  — mutes/unmutes everything via Howler global volume
+ *   isMuted       — current mute state
  *
- * Add .mp3 files to /public/sounds/ — if they're missing the game
- * still works, just silently (Howler handles missing files gracefully).
+ * Place audio files at:
+ *   public/sounds/background.mp3
+ *   public/sounds/catch.mp3
+ *   public/sounds/win.mp3
+ *   public/sounds/lose.mp3
+ *   public/sounds/tick.mp3
  */
 export const useSound = () => {
-  const sounds = useRef({});
+  const sfx = useRef({});
+  const bgMusicRef = useRef(null);
+  const [isMuted, setIsMuted] = useState(false);
 
-  const getSound = useCallback((name, src, volume = 0.6) => {
-    if (!sounds.current[name]) {
-      sounds.current[name] = new Howl({ src: [src], volume, html5: true });
+  // ── One-shot SFX ────────────────────────────────────────────────────────────
+  const getSfx = useCallback((name, src, volume = 0.6) => {
+    if (!sfx.current[name]) {
+      sfx.current[name] = new Howl({ src: [src], volume, html5: true });
     }
-    return sounds.current[name];
+    return sfx.current[name];
   }, []);
 
   const play = useCallback(
     (name) => {
       try {
         const map = {
-          catch: () => getSound("catch", "/sounds/catch.mp3", 0.5),
-          win:   () => getSound("win",   "/sounds/win.mp3",   0.7),
-          lose:  () => getSound("lose",  "/sounds/lose.mp3",  0.6),
-          tick:  () => getSound("tick",  "/sounds/tick.mp3",  0.3),
+          catch: () => getSfx("catch", "/sounds/catch.mp3", 0.5),
+          win:   () => getSfx("win",   "/sounds/win.mp3",   0.7),
+          lose:  () => getSfx("lose",  "/sounds/lose.mp3",  0.6),
+          tick:  () => getSfx("tick",  "/sounds/tick.mp3",  0.3),
         };
         if (map[name]) map[name]().play();
       } catch {
-        // Sound missing — silently ignore
+        // Sound file missing — silently ignore
       }
     },
-    [getSound]
+    [getSfx]
   );
 
-  return { play };
+  // ── Background music ────────────────────────────────────────────────────────
+  const startMusic = useCallback(() => {
+    try {
+      // Create Howl instance only once
+      if (!bgMusicRef.current) {
+        bgMusicRef.current = new Howl({
+          src: ["/sounds/background.mp3"],
+          loop: true,
+          volume: 0.4,
+          html5: true,
+        });
+      }
+
+      // Don't stack multiple plays — only start if not already playing
+      if (!bgMusicRef.current.playing()) {
+        bgMusicRef.current.play();
+      }
+    } catch {
+      // Missing audio file — silently ignore
+    }
+  }, []);
+
+  const stopMusic = useCallback(() => {
+    try {
+      bgMusicRef.current?.stop();
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  // ── Mute toggle — uses Howler global mute so it covers everything ───────────
+  const toggleMute = useCallback(() => {
+    setIsMuted((prev) => {
+      const next = !prev;
+      Howler.mute(next);
+      return next;
+    });
+  }, []);
+
+  // ── Cleanup on unmount ──────────────────────────────────────────────────────
+  // (called if App ever unmounts — prevents audio leak in strict mode)
+  const destroyAll = useCallback(() => {
+    bgMusicRef.current?.unload();
+    bgMusicRef.current = null;
+    Object.values(sfx.current).forEach((s) => s.unload());
+    sfx.current = {};
+  }, []);
+
+  return { play, startMusic, stopMusic, toggleMute, isMuted, destroyAll };
 };
