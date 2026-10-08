@@ -38,7 +38,7 @@ const Star = ({ star, onCatch }) => {
         x: [0, wobbleX, 0, -wobbleX, 0],
         opacity: [0, 1, 1, 1, 0.8],
         scale: [0.5, 1, 1, 1, 0.9],
-        rotate: [0, 10, 0, -10, 0],
+        rotate: [0, 40, 0, -40, 0],
       }}
       transition={{
         duration: fallDuration,

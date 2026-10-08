@@ -28,13 +28,13 @@ const StartScreen = ({ onStart }) => {
           className="text-4xl md:text-6xl font-bold text-white"
           style={{ fontFamily: "Dancing Script, cursive" }}
         >
-          Catch A Star
+          Catch The Star My Baby
         </h1>
         <p
           className="text-pink-300 text-lg md:text-xl"
           style={{ fontFamily: "Dosis, sans-serif" }}
         >
-          A little game made just for you ❤️
+          A cute little game made just for you ❤️
         </p>
       </motion.div>
 
@@ -43,7 +43,7 @@ const StartScreen = ({ onStart }) => {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="w-full max-w-sm rounded-2xl border border-pink-400/20 backdrop-blur-md px-6 py-5 text-left flex flex-col gap-3"
+        className="w-full max-w-max rounded-2xl border border-pink-400/20 backdrop-blur-md px-6 py-5 text-left flex flex-col gap-3"
         style={{ background: "rgba(177, 26, 112, 0.1)" }}
       >
         <p
@@ -53,11 +53,11 @@ const StartScreen = ({ onStart }) => {
           How to play
         </p>
         {[
-          `⭐  Tap the falling stars to catch them`,
-          `💌  Each star reveals a reason I love you`,
-          `🎯  Catch ${GAME_CONFIG.GOAL} stars to unlock a secret message`,
-          `⏱️  You have ${GAME_CONFIG.TIME_LIMIT} seconds — hurry!`,
-          `🔥  Stars fall faster as you go — don't blink!`,
+          `⭐  Baby to apko ye girte hue stars ko catch krna h`,
+          `💌  And haar star me ek message chupa hua h`,
+          `🎯  And ${GAME_CONFIG.GOAL} stars catch krne pe ek secret h`,
+          `⏱️  Apke pass bus ${GAME_CONFIG.TIME_LIMIT} secs honge stars catch krne ke liye`,
+          `🔥  Stars dheere dheere fast bhi ho jayenge to give your best`,
         ].map((rule, i) => (
           <p
             key={i}
@@ -83,7 +83,7 @@ const StartScreen = ({ onStart }) => {
           fontFamily: "Dosis, sans-serif",
         }}
       >
-        Start Catching ⭐
+        So let's start it ⭐
       </motion.button>
     </motion.div>
   );
