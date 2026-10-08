@@ -6,26 +6,23 @@ import { generateCollectible, pickLoveReason, getSpawnInterval } from "../utils/
 /**
  * Core game loop hook.
  *
- * Tracks:
- *   score         — display score (+1 heart, -1 star, clamped to SCORE_MIN)
- *   heartsCaught  — true progress toward the goal (hearts only)
- *   stars         — all live collectibles on screen (both stars and hearts)
+ * Single counter: heartsCaught
+ *   ❤️ heart caught  → +1 (counts toward HEART_GOAL, reveals love message)
+ *   ⭐ star caught   → -1 (deducted from the same counter, clamped to 0)
  *
  * Win condition: heartsCaught >= HEART_GOAL
  */
 export const useGameLoop = ({ onWin, onLose, playSound }) => {
-  const [phase, setPhase] = useState("idle"); // idle | playing | won | lost
+  const [phase, setPhase] = useState("idle");
   const [collectibles, setCollectibles] = useState([]);
-  const [score, setScore] = useState(0);
   const [heartsCaught, setHeartsCaught] = useState(0);
   const [timeLeft, setTimeLeft] = useState(GAME_CONFIG.TIME_LIMIT);
   const [caughtReasons, setCaughtReasons] = useState([]);
   const [lastCaughtReason, setLastCaughtReason] = useState(null);
-  // Increments on every star catch to trigger the "-1" feedback in the HUD
+  // Increments every time a star is caught — triggers "-1" shake in HUD
   const [lastStarPenalty, setLastStarPenalty] = useState(0);
 
   // Refs to avoid stale closures in intervals
-  const scoreRef = useRef(0);
   const heartsCaughtRef = useRef(0);
   const shownIndicesRef = useRef([]);
   const spawnTimerRef = useRef(null);
@@ -42,16 +39,13 @@ export const useGameLoop = ({ onWin, onLose, playSound }) => {
     const spawn = () => {
       setCollectibles((prev) => {
         if (prev.length >= GAME_CONFIG.MAX_STARS_ON_SCREEN) {
-          // Still reschedule even if screen is full
           spawnTimerRef.current = setTimeout(spawn, getSpawnInterval(heartsCaughtRef.current));
           return prev;
         }
         return [...prev, generateCollectible(heartsCaughtRef.current)];
       });
-
       spawnTimerRef.current = setTimeout(spawn, getSpawnInterval(heartsCaughtRef.current));
     };
-
     spawnTimerRef.current = setTimeout(spawn, getSpawnInterval(0));
   }, []);
 
@@ -65,14 +59,12 @@ export const useGameLoop = ({ onWin, onLose, playSound }) => {
 
   // ── Start game ──────────────────────────────────────────────────────────────
   const startGame = useCallback(() => {
-    scoreRef.current = 0;
     heartsCaughtRef.current = 0;
     shownIndicesRef.current = [];
     phaseRef.current = "playing";
 
     setPhase("playing");
     setCollectibles([]);
-    setScore(0);
     setHeartsCaught(0);
     setTimeLeft(GAME_CONFIG.TIME_LIMIT);
     setCaughtReasons([]);
@@ -81,7 +73,6 @@ export const useGameLoop = ({ onWin, onLose, playSound }) => {
 
     startSpawnLoop();
 
-    // Countdown timer
     countdownRef.current = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
@@ -103,11 +94,10 @@ export const useGameLoop = ({ onWin, onLose, playSound }) => {
     (collectibleId, collectibleType) => {
       if (phaseRef.current !== "playing") return;
 
-      // Remove from screen immediately
       setCollectibles((prev) => prev.filter((c) => c.id !== collectibleId));
 
       if (collectibleType === "heart") {
-        // ── HEART: +1 score, +1 progress, reveal message ──────────────────────
+        // ── HEART: +1, reveal message ──────────────────────────────────────────
         const { reason, index } = pickLoveReason(LOVE_REASONS, shownIndicesRef.current);
         shownIndicesRef.current = [...shownIndicesRef.current, index];
 
@@ -115,15 +105,11 @@ export const useGameLoop = ({ onWin, onLose, playSound }) => {
         setCaughtReasons((prev) => [...prev, reason]);
         playSound("catch");
 
-        const newScore = scoreRef.current + 1;
         const newHearts = heartsCaughtRef.current + 1;
-        scoreRef.current = newScore;
         heartsCaughtRef.current = newHearts;
-
-        setScore(newScore);
         setHeartsCaught(newHearts);
 
-        // Win check — must be hearts, not total score
+        // Win check
         if (newHearts >= GAME_CONFIG.HEART_GOAL) {
           clearTimers();
           phaseRef.current = "won";
@@ -132,17 +118,14 @@ export const useGameLoop = ({ onWin, onLose, playSound }) => {
           onWin?.();
         }
       } else {
-        // ── STAR: -1 score, no message, penalty feedback ───────────────────────
-        playSound("catch"); // lighter sound; swap for a dedicated "oops" sound if you have one
+        // ── STAR: -1 from the same heartsCaught counter, floor at 0 ───────────
+        playSound("catch");
 
-        const newScore = Math.max(
-          scoreRef.current - 1,
-          GAME_CONFIG.SCORE_MIN
-        );
-        scoreRef.current = newScore;
-        setScore(newScore);
+        const newHearts = Math.max(heartsCaughtRef.current - 1, 0);
+        heartsCaughtRef.current = newHearts;
+        setHeartsCaught(newHearts);
 
-        // Incrementing this triggers the "-1" shake animation in HUD
+        // Trigger penalty shake animation in HUD
         setLastStarPenalty((prev) => prev + 1);
       }
     },
@@ -153,13 +136,11 @@ export const useGameLoop = ({ onWin, onLose, playSound }) => {
   const retryGame = useCallback(() => {
     clearTimers();
     phaseRef.current = "idle";
-    scoreRef.current = 0;
     heartsCaughtRef.current = 0;
     shownIndicesRef.current = [];
 
     setPhase("idle");
     setCollectibles([]);
-    setScore(0);
     setHeartsCaught(0);
     setTimeLeft(GAME_CONFIG.TIME_LIMIT);
     setCaughtReasons([]);
@@ -167,7 +148,7 @@ export const useGameLoop = ({ onWin, onLose, playSound }) => {
     setLastStarPenalty(0);
   }, []);
 
-  // ── Schedule expiry whenever collectibles list changes ──────────────────────
+  // ── Schedule expiry whenever collectibles change ────────────────────────────
   useEffect(() => {
     collectibles.forEach((c) => scheduleExpiry(c.id, c.lifetime));
   }, [collectibles, scheduleExpiry]);
@@ -180,7 +161,6 @@ export const useGameLoop = ({ onWin, onLose, playSound }) => {
   return {
     phase,
     collectibles,
-    score,
     heartsCaught,
     timeLeft,
     caughtReasons,

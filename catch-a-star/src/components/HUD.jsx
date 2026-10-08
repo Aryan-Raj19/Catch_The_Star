@@ -4,20 +4,18 @@ import { Timer } from "lucide-react";
 import { GAME_CONFIG } from "../constants/gameConfig";
 
 /**
- * Heads-up display — shows:
- *   ❤️ heartsCaught / HEART_GOAL   (main progress toward win)
- *   score                           (running tally, shakes on star penalty)
- *   countdown timer                 (turns red + shakes in final seconds)
- *   progress bar                    (tied to heartsCaught)
+ * HUD — shows:
+ *   ❤️ heartsCaught / HEART_GOAL  — single counter (hearts +1, stars -1)
+ *   countdown timer               — turns red + shakes in final seconds
+ *   progress bar                  — tied to heartsCaught
  *
- * lastStarPenalty increments each time a star is caught — used to
- * trigger the "-1" shake animation without a timeout race condition.
+ * lastStarPenalty increments on every star catch to trigger
+ * the "-1" shake on the single hearts counter.
  */
-const HUD = ({ score, heartsCaught, timeLeft, lastStarPenalty }) => {
+const HUD = ({ heartsCaught, timeLeft, lastStarPenalty }) => {
   const isWarning = timeLeft <= GAME_CONFIG.TIMER_WARNING;
   const progress = Math.min((heartsCaught / GAME_CONFIG.HEART_GOAL) * 100, 100);
 
-  // Show a "-1" flash when a star is caught
   const [showPenalty, setShowPenalty] = useState(false);
 
   useEffect(() => {
@@ -33,39 +31,34 @@ const HUD = ({ score, heartsCaught, timeLeft, lastStarPenalty }) => {
       {/* Top row */}
       <div className="flex justify-between items-center gap-2">
 
-        {/* ❤️ Heart progress */}
-        <div className="flex items-center gap-2 backdrop-blur-sm bg-white/5 border border-white/10 rounded-full px-4 py-1.5">
-          <span className="text-sm leading-none">❤️</span>
-          <span
-            className="text-white font-bold text-sm"
-            style={{ fontFamily: "Dosis, sans-serif" }}
-          >
-            {heartsCaught} / {GAME_CONFIG.HEART_GOAL}
-          </span>
-        </div>
-
-        {/* Score with penalty shake */}
+        {/* Single heart counter — shakes on star penalty */}
         <div className="relative flex items-center">
           <motion.div
             key={lastStarPenalty}
             animate={
               showPenalty
-                ? { x: [-4, 4, -3, 3, 0], backgroundColor: ["rgba(239,68,68,0.3)", "rgba(255,255,255,0.05)"] }
+                ? {
+                    x: [-4, 4, -3, 3, 0],
+                    backgroundColor: [
+                      "rgba(239,68,68,0.3)",
+                      "rgba(255,255,255,0.05)",
+                    ],
+                  }
                 : {}
             }
             transition={{ duration: 0.4 }}
             className="flex items-center gap-2 backdrop-blur-sm bg-white/5 border border-white/10 rounded-full px-4 py-1.5"
           >
-            <span className="text-sm leading-none">⭐</span>
+            <span className="text-sm leading-none">❤️</span>
             <span
               className="text-white font-bold text-sm"
               style={{ fontFamily: "Dosis, sans-serif" }}
             >
-              {score}
+              {heartsCaught} / {GAME_CONFIG.HEART_GOAL}
             </span>
           </motion.div>
 
-          {/* Floating "-1" indicator */}
+          {/* Floating "-1" on star catch */}
           <AnimatePresence>
             {showPenalty && (
               <motion.span
@@ -100,7 +93,9 @@ const HUD = ({ score, heartsCaught, timeLeft, lastStarPenalty }) => {
               className={isWarning ? "text-red-400" : "text-pink-300"}
             />
             <span
-              className={`font-bold text-sm ${isWarning ? "text-red-300" : "text-white"}`}
+              className={`font-bold text-sm ${
+                isWarning ? "text-red-300" : "text-white"
+              }`}
               style={{ fontFamily: "Dosis, sans-serif" }}
             >
               {timeLeft}s
@@ -109,7 +104,7 @@ const HUD = ({ score, heartsCaught, timeLeft, lastStarPenalty }) => {
         </AnimatePresence>
       </div>
 
-      {/* Heart progress bar */}
+      {/* Progress bar tied to heartsCaught */}
       <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
         <motion.div
           className="h-full rounded-full"

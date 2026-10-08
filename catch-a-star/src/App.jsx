@@ -24,7 +24,6 @@ function App() {
   const {
     phase,
     collectibles,
-    score,
     heartsCaught,
     timeLeft,
     caughtReasons,
@@ -35,25 +34,20 @@ function App() {
     retryGame,
   } = useGameLoop({ playSound: play });
 
-  // Clean up all Howler instances when App unmounts (React StrictMode safe)
   useEffect(() => {
     return () => destroyAll();
   }, [destroyAll]);
 
-  // ── Handlers ────────────────────────────────────────────────────────────────
-
   const handleStart = () => {
-    startMusic(); // music begins only on user interaction
+    startMusic();
     startGame();
   };
 
   const handleRetry = () => {
-    // Music keeps playing through retry — restart only if it stopped
     startMusic();
     retryGame();
   };
 
-  // Stop music on win/lose screens
   useEffect(() => {
     if (phase === "won" || phase === "lost") {
       stopMusic();
@@ -62,10 +56,8 @@ function App() {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
-      {/* Always-present starry background */}
       <FallingBackground />
 
-      {/* Mute / unmute button — visible in all phases except idle start screen */}
       {phase !== "idle" && (
         <motion.button
           initial={{ opacity: 0 }}
@@ -80,22 +72,18 @@ function App() {
 
       <AnimatePresence mode="wait">
 
-        {/* ── Start screen ── */}
         {phase === "idle" && (
           <StartScreen key="start" onStart={handleStart} />
         )}
 
-        {/* ── Active game ── */}
         {phase === "playing" && (
           <div key="game" className="relative w-full h-full">
             <HUD
-              score={score}
               heartsCaught={heartsCaught}
               timeLeft={timeLeft}
               lastStarPenalty={lastStarPenalty}
             />
 
-            {/* Falling collectibles — stars and hearts */}
             {collectibles.map((collectible) => (
               <Star
                 key={collectible.id}
@@ -104,7 +92,6 @@ function App() {
               />
             ))}
 
-            {/* Love reason popup — only appears after a heart is caught */}
             <LoveReasonCard
               key={lastCaughtReason}
               reason={lastCaughtReason}
@@ -112,7 +99,6 @@ function App() {
           </div>
         )}
 
-        {/* ── Win screen ── */}
         {phase === "won" && (
           <WinScreen
             key="win"
@@ -121,7 +107,6 @@ function App() {
           />
         )}
 
-        {/* ── Lose screen ── */}
         {phase === "lost" && (
           <LoseScreen
             key="lose"
