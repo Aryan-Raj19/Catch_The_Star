@@ -1,16 +1,16 @@
 export const GAME_CONFIG = {
   // Hearts needed to win (only hearts count toward goal)
-  HEART_GOAL: 10,
+  HEART_GOAL: 7,
 
   // Probability a spawned collectible is a heart (rest are stars)
   // 0.1 = 10% hearts, 90% stars → approximately 10:1 ratio
-  HEART_PROBABILITY: 0.17,
+  HEART_PROBABILITY: 0.4,
 
   // Timer: total seconds she has
-  TIME_LIMIT: 25,
+  TIME_LIMIT: 30,
 
   // How many collectibles are alive on screen at once (max)
-  MAX_STARS_ON_SCREEN: 30,
+  MAX_STARS_ON_SCREEN: 40,
 
   // How often a new collectible spawns (ms) — decreases as hearts go up
   SPAWN_INTERVAL_BASE: 300,   // start: new item every .3s
