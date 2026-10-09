@@ -54,25 +54,25 @@ export const useSound = () => {
             getSfx(
               "catch",
               "https://res.cloudinary.com/qdtuufkt/video/upload/v1791532382/wow.mp3",
-              0.5,
+              1.0,
             ),
           win: () =>
             getSfx(
               "win",
               "https://res.cloudinary.com/qdtuufkt/video/upload/v1791532382/clap.mp3",
-              0.7,
+              0.9,
             ),
           lose: () =>
             getSfx(
               "lose",
               "https://res.cloudinary.com/qdtuufkt/video/upload/v1791532384/bomb.mp3",
-              0.6,
+              0.8,
             ),
           tick: () =>
             getSfx(
               "tick",
               "https://res.cloudinary.com/qdtuufkt/video/upload/v1791532382/timer.mp3",
-              0.3,
+              1.0,
             ),
 
           minus: () => {
@@ -83,7 +83,7 @@ export const useSound = () => {
 
             const file = files[Math.floor(Math.random() * files.length)];
 
-            return getSfx(`minus-${file}`, file, 0.5);
+            return getSfx(`minus-${file}`, file, 0.8);
           },
         };
 
@@ -105,7 +105,7 @@ export const useSound = () => {
             "https://res.cloudinary.com/qdtuufkt/video/upload/v1791529517/Romantic_Love_Mashup_2025____Arijit_Singh_Love_Songs____Romantic_Songs_2025__cut_2409sec.mp3",
           ],
           loop: true,
-          volume: 0.4,
+          volume: 0.2,
           html5: true,
         });
       }
