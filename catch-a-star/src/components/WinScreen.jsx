@@ -108,7 +108,7 @@ const WinScreen = ({ caughtReasons, onReplay }) => {
             className="text-center text-pink-300 font-bold text-lg mb-4"
             style={{ fontFamily: "Dancing Script, cursive" }}
           >
-            Stars you caught tonight ✨
+            💘 Hearts you caught tonight 💘
           </p>
           <div className="flex flex-col gap-2">
             {caughtReasons.map((reason, i) => (
@@ -119,7 +119,7 @@ const WinScreen = ({ caughtReasons, onReplay }) => {
                 transition={{ delay: 1.1 + i * 0.07 }}
                 className="flex items-start gap-3 rounded-xl px-4 py-2.5 border border-white/5 bg-white/5"
               >
-                <span className="text-yellow-300 text-sm mt-0.5">⭐</span>
+                <span className="text-yellow-300 text-sm mt-0.5">💝</span>
                 <p
                   className="text-white/75 text-sm"
                   style={{ fontFamily: "Dosis, sans-serif" }}
@@ -145,7 +145,7 @@ const WinScreen = ({ caughtReasons, onReplay }) => {
             fontFamily: "Dosis, sans-serif",
           }}
         >
-          Play Again 🌟
+          Play Again 💖
         </motion.button>
       </motion.div>
     </>

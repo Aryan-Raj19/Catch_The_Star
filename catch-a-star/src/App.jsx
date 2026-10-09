@@ -48,14 +48,14 @@ function App() {
     retryGame();
   };
 
-  useEffect(() => {
-    if (phase === "won" || phase === "lost") {
-      stopMusic();
-    }
-  }, [phase, stopMusic]);
+  // useEffect(() => {
+  //   if (phase === "won" || phase === "lost") {
+  //     stopMusic();
+  //   }
+  // }, [phase, stopMusic]);
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden">
+    <div className="relative w-screen h-screen">
       <FallingBackground />
 
       {phase !== "idle" && (

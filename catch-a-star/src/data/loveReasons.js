@@ -15,6 +15,16 @@ export const LOVE_REASONS = [
   "Tere sath bitaya haar lamha heere💎 se bhi anmol h meri cutu😘",
   "Teri khushi me hi meri khushi h or teri muskan me meri chain😇❤️",
   "My life became infinitely better the moment you walked into it🎀❤️🎀",
+  "You are the most beautiful person I have ever met, and I am so grateful to have you in my life.💖",
+  "I love you more than words can express, and I will always cherish and adore you always.💞",
+  "You are my everything, my love, my partner, my best friend, and I am so lucky to have you in my life.💘",
+  "Tu mere wo dua h jo har roz maine maangi h, tu meri zindagi ka sabse khoobsurat toufa h🎁❤️",
+  "Tere bina meri zindagi adhoori h cutu, tu mere life ka sabse pyara part h💖",
+  "Haar raat tere se ghanto tk teri pyari pyari baatein sunna meri life ka sabse sukoon bhara pal h😌❤️",
+  "Mujhe to tera gussa bhi pyara lgta h cutu, teri cutu si naak or laal ho jati h and eyes or badi-badi and pyari si ho jati h😘💋",
+  "Babu, you are the most important person in my life, and I will always be here for you.💖",
+  "And mujhe pta h ki tu bhi mujhe utha hi pyar krti h jitna mai ya usse jyada hi. And this makes me the happiest person alive💞",
+  "You are everything I have dreamed of, and mai haar din bhagwaan ko thanks bolta hu tujhe meri life me bejne ke liye.💖",
 ];
 
 // Final unlocked message shown on win screen

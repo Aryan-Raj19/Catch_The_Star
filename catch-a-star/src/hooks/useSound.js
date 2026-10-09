@@ -29,21 +29,70 @@ export const useSound = () => {
     return sfx.current[name];
   }, []);
 
+  // const play = useCallback(
+  //   (name) => {
+  //     try {
+  //       const map = {
+  //         catch: () => getSfx("catch", "/sounds/catch.mp3", 0.5),
+  //         win:   () => getSfx("win",   "/sounds/win.mp3",   0.7),
+  //         lose:  () => getSfx("lose",  "/sounds/lose.mp3",  0.6),
+  //         tick:  () => getSfx("tick",  "/sounds/tick.mp3",  0.3),
+  //       };
+  //       if (map[name]) map[name]().play();
+  //     } catch {
+  //       // Sound file missing — silently ignore
+  //     }
+  //   },
+  //   [getSfx]
+  // );
+
   const play = useCallback(
     (name) => {
       try {
         const map = {
-          catch: () => getSfx("catch", "/sounds/catch.mp3", 0.5),
-          win:   () => getSfx("win",   "/sounds/win.mp3",   0.7),
-          lose:  () => getSfx("lose",  "/sounds/lose.mp3",  0.6),
-          tick:  () => getSfx("tick",  "/sounds/tick.mp3",  0.3),
+          catch: () =>
+            getSfx(
+              "catch",
+              "https://res.cloudinary.com/qdtuufkt/video/upload/v1791532382/wow.mp3",
+              0.5,
+            ),
+          win: () =>
+            getSfx(
+              "win",
+              "https://res.cloudinary.com/qdtuufkt/video/upload/v1791532382/clap.mp3",
+              0.7,
+            ),
+          lose: () =>
+            getSfx(
+              "lose",
+              "https://res.cloudinary.com/qdtuufkt/video/upload/v1791532384/bomb.mp3",
+              0.6,
+            ),
+          tick: () =>
+            getSfx(
+              "tick",
+              "https://res.cloudinary.com/qdtuufkt/video/upload/v1791532382/timer.mp3",
+              0.3,
+            ),
+
+          minus: () => {
+            const files = [
+              "https://res.cloudinary.com/qdtuufkt/video/upload/v1791532382/spring.mp3",
+              "https://res.cloudinary.com/qdtuufkt/video/upload/v1791532381/oh_no.mp3",
+            ];
+
+            const file = files[Math.floor(Math.random() * files.length)];
+
+            return getSfx(`minus-${file}`, file, 0.5);
+          },
         };
+
         if (map[name]) map[name]().play();
       } catch {
         // Sound file missing — silently ignore
       }
     },
-    [getSfx]
+    [getSfx],
   );
 
   // ── Background music ────────────────────────────────────────────────────────
@@ -52,7 +101,9 @@ export const useSound = () => {
       // Create Howl instance only once
       if (!bgMusicRef.current) {
         bgMusicRef.current = new Howl({
-          src: ["/sounds/background.mp3"],
+          src: [
+            "https://res.cloudinary.com/qdtuufkt/video/upload/v1791529517/Romantic_Love_Mashup_2025____Arijit_Singh_Love_Songs____Romantic_Songs_2025__cut_2409sec.mp3",
+          ],
           loop: true,
           volume: 0.4,
           html5: true,

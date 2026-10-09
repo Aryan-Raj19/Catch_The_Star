@@ -119,7 +119,7 @@ export const useGameLoop = ({ onWin, onLose, playSound }) => {
         }
       } else {
         // ── STAR: -1 from the same heartsCaught counter, floor at 0 ───────────
-        playSound("catch");
+        playSound("minus");
 
         const newHearts = Math.max(heartsCaughtRef.current - 1, 0);
         heartsCaughtRef.current = newHearts;
