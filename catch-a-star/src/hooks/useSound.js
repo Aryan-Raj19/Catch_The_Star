@@ -105,7 +105,7 @@ export const useSound = () => {
             "https://res.cloudinary.com/qdtuufkt/video/upload/v1791529517/Romantic_Love_Mashup_2025____Arijit_Singh_Love_Songs____Romantic_Songs_2025__cut_2409sec.mp3",
           ],
           loop: true,
-          volume: 0.2,
+          volume: 0.3,
           html5: true,
         });
       }
